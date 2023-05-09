@@ -138,14 +138,15 @@ def cart(request):
 
     # Display Total on Cart Page
     amount = decimal.Decimal(0)
-    shipping_amount = decimal.Decimal(10)
+    shipping_amount = decimal.Decimal(5)
     # using list comprehension to calculate total amount based on quantity and shipping
     cp = [p for p in Cart.objects.all() if p.user==user]
     if cp:
         for p in cp:
             temp_amount = (p.quantity * p.product.price)
             amount += temp_amount
-
+        
+    shipping_amount = round(amount*shipping_amount/100,2)
     # Customer Addresses
     addresses = Address.objects.filter(user=user)
 
