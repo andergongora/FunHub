@@ -60,8 +60,7 @@
                       <td class="align-middle border-0">
                         <p class="mb-0 small">${{fav_product.product.price}}</p>
                       </td>
-                      <!-- ¡¡¡¡¡¡CONFIGURAR BOTON DE BORRAR!!!!! -->
-                      <td class="align-middle border-0"><a class="reset-anchor" href="{% url 'store:remove-cart' fav_product.id %}"><i class="fas fa-trash-alt small text-muted"></i></a></td> 
+                      <td class="align-middle border-0"><a class="reset-anchor" href="{% url 'store:remove-favorite' fav_product.product_id %}"><i class="fas fa-trash-alt small text-muted"></i></a></td>
                     </tr>
                     {% endfor %}
 

@@ -20,11 +20,12 @@ def search(request):
     categories = Category.objects.filter(is_active=True)
     if query:
         products = Product.objects.filter(Q(title__icontains=query) | Q(short_description__icontains=query) | Q(detail_description__icontains=query))
-    context = {'products': products, 'categories':categories}
+    favorites = Product.objects.filter(favorites__user=request.user)
+    context = {'products': products, 'categories':categories, 'favorites': favorites,}
     return render(request, 'store/search.html', context)
 
 def home(request):
-    categories = Category.objects.filter(is_active=True, is_featured=True)[:3]
+    categories = Category.objects.filter(is_active=True, is_featured=True)
     products = Product.objects.filter(is_active=True, is_featured=True)[:8]
     context = {
         'categories': categories,
@@ -39,10 +40,12 @@ def detail(request, slug):
     for categoria in product.category.all():
         related_products += Product.objects.exclude(id=product.id).filter(is_active=True, category__title=categoria.title)
     categories=product.category.all()
+    favorites = Product.objects.filter(favorites__user=request.user)
     context = {
         'product': product,
         'related_products': related_products,
         'categories': categories,
+        'favorites': favorites,
 
     }
     return render(request, 'store/detail.html', context)
@@ -57,10 +60,13 @@ def category_products(request, slug):
     category = get_object_or_404(Category, slug=slug)
     products = Product.objects.filter(is_active=True, category=category)
     categories = Category.objects.filter(is_active=True)
+    favorites = Product.objects.filter(favorites__user=request.user)
+
     context = {
         'category': category,
         'products': products,
         'categories': categories,
+        'favorites': favorites,
     }
     return render(request, 'store/category_products.html', context)
 
@@ -244,3 +250,28 @@ def favorites(request):
         'favorites_products': favorites_products,
     }
     return render(request, 'store/favorites.html', context)
+
+
+@login_required
+def remove_favorite(request, product_id):
+    if request.method == 'GET':
+        f = get_object_or_404(Favorites, product_id=product_id)
+        f.delete()
+        messages.success(request, "Product removed from Favorites.")
+    return redirect('store:favorites')
+
+@login_required
+def add_to_favorites(request):
+    user = request.user
+    product_id = request.GET.get('prod_id')
+    product = get_object_or_404(Product, id=product_id)
+
+    # Check whether the Product is alread in Favorites or Not
+    item_already_in_favorites = Favorites.objects.filter(product=product_id, user=user)
+    if item_already_in_favorites:
+        messages.success(request, "Product is already in Favorites.")
+    else:
+        Favorites(user=user, product=product).save()
+    
+    return redirect('store:favorites')
+    
