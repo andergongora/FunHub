@@ -9,13 +9,13 @@
           <div class="container">
             <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
               <div class="col-lg-6">
-                <h1 class="h2 text-uppercase mb-0">Favorites</h1>
+                <h1 class="h2 text-uppercase mb-0">Favoritos</h1>
               </div>
               <div class="col-lg-6 text-lg-right">
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Cart</li>
+                    <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Favoritos</li>
                   </ol>
                 </nav>
               </div>
@@ -25,7 +25,7 @@
 
         {% if favorites_products %}
         <section class="py-5">
-          <h2 class="h5 text-uppercase mb-4">Shopping cart</h2>
+          <h2 class="h5 text-uppercase mb-4">Favoritos</h2>
 
           {% include 'partials/_messages.html' %}
 
@@ -36,8 +36,8 @@
                 <table class="table">
                   <thead class="bg-light">
                     <tr>
-                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Product</strong></th>
-                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Price</strong></th>
+                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Producto</strong></th>
+                      <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Precio</strong></th>
                       <th class="border-0" scope="col"> </th>
                     </tr>
                   </thead>
@@ -70,8 +70,8 @@
               <!-- CART NAV-->
               <div class="bg-light px-4 py-3">
                 <div class="row align-items-center text-center">
-                  <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href="{% url 'store:home' %}"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a></div>
-                  <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" href="checkout.html">Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
+                  <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href="{% url 'store:home' %}"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Seguir comprando</a></div>
+                  <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" href="checkout.html">Proceder al pago<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
                 </div>
               </div>
             </div>
@@ -83,8 +83,8 @@
         {% else %}
 
           <div class="text-center py-5">
-            <h3 class="mb-3">Your favorites list is empty.</h3>
-            <a href="{% url 'store:home' %}"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a>
+            <h3 class="mb-3">Tu lista de favoritos esta vacía.</h3>
+            <a href="{% url 'store:home' %}"><i class="fas fa-long-arrow-alt-left mr-2"> </i>Seguir comprando</a>
           </div>
 
         {% endif %}

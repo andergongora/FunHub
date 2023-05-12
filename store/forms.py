@@ -13,9 +13,9 @@ from django.utils.translation import gettext, gettext_lazy as _
 
 
 class RegistrationForm(UserCreationForm):
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Password'}))
-    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Confirm Password'}))
-    email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Contraseña'}))
+    password2 = forms.CharField(label="Confirmar contraseña ", widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder':'Confirmar contraseña'}))
+    email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder':'email'}))
 
     class Meta:
         model = User
@@ -25,8 +25,8 @@ class RegistrationForm(UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
-    username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control'}))
-    password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'current-password', 'class':'form-control'}))
+    username = UsernameField(label=_("Nombre de usuario") ,widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control'}))
+    password = forms.CharField(label=_("Contraseña"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'current-password', 'class':'form-control'}))
 
 
 class AddressForm(forms.ModelForm):
