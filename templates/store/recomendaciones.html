@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="container">
+    <!-- HERO SECTION-->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+          <div class="col-lg-6">
+            <h1 class="h2 text-uppercase mb-0">Recommendaciones</h1>
+          </div>
+          <div class="col-lg-6 text-lg-right">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+                <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'store:search' %}">Recommendaciones</a></li>
+                <!-- <li class="breadcrumb-item active" aria-current="page">{{category.title}}</li> -->
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-5">
+    <header class="text-center">
+        <h2 class="h5 text-uppercase">¿No sabes que hacer?</h2>
+        <h2 class="h5 text-uppercase">Realiza un cuestionario y te recomendamos </h2>
+        <h2 class="h5 text-uppercase mb-4">productos ajustados a tus gustos</h2>
+        <a class="small text-muted small text-uppercase mb-1" href="{% url 'store:cuestionario' %}">Iniciar cuestionario</p>
+      </header>
+    </section>
+    <section class="py-5">
+      <div class="container p-0">
+        <div class="row justify-content-lg-center">
+
+          <!-- SHOP LISTING-->
+          <div class="col-lg-11 order-1 order-lg-2 mb-5 mb-lg-0">
+            <div class="row mb-3 align-items-center">
+              <div class="col-lg-6 mb-2 mb-lg-0">
+                {% if products|length == 1 %}
+                <p class="text-small text-muted mb-0">{{ products|length }} resultado</p>
+                {% else %}
+                <p class="text-small text-muted mb-0">{{ products|length }} resultados</p>
+                {% endif %}
+                
+              </div>
+              
+            </div>
+
+            <div class="row">
+
+                {% for product in products %}
+                
+                  <!-- PRODUCT-->
+                  <div class="col-lg-3 col-sm-6">
+                    <div class="product text-center">
+                      <div class="mb-3 position-relative">
+
+                        <div class="badge text-white badge-"></div>
+
+                        <a class="d-block" href="{% url 'store:product-detail' product.slug %}">
+                          {% if product.product_image %}
+                            <img class="img-fluid w-100" src="{{product.product_image.url}}" alt="{{product.title}}">
+                          {% else %}
+                            <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{product.title}}">
+                          {% endif %}
+                        </a>
+
+                        <div class="product-overlay">
+                          <ul class="mb-0 list-inline">
+                            <li class="list-inline-item m-0 p-0">
+                              {% if product in favorites %}
+                              <form action="{% url 'store:remove-favorite' product.id %}">
+                                <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                                <button type="submit" class="btn btn-sm btn-outline-dark"><i class="fas fa-heart red-icon" style="color : red;"></i></button>
+                              </form>
+                              {% else %}
+                              <form action="{% url 'store:add-to-favorites' %}">
+                                <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                                <button type="submit" class="btn btn-sm btn-outline-dark"><i class="fa fa-heart red-icon"></i></button>
+                              </form>
+                              {% endif %}
+                            </li>
+                            <li class="list-inline-item m-0 p-0">
+                              {% comment %} <a class="btn btn-sm btn-dark" href="{% url 'store:add-to-cart' %}">Añadir al Carrito</a> {% endcomment %}
+
+                              <form action="{% url 'store:add-to-cart' %}">
+                                <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                                <button type="submit" class="btn btn-sm btn-dark">Añadir al Carrito</button>
+                              </form>
+
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <h6> <a class="reset-anchor" href="{% url 'store:product-detail' product.slug %}">{{product.title}}</a></h6>
+                      <p class="small text-muted">${{product.price}}</p>
+                    </div>
+                  </div>
+
+                {% endfor %}
+
+
+            </div>            
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+{% endblock content %}

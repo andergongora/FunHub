@@ -1,0 +1,86 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container">
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+        <div class="col-lg-6">
+          <h1 class="h2 text-uppercase mb-0">Cuestionario</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-5">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="question1">¿Buscas un plan al aire libre?</label>
+        <select id="question1" class="form-control" name="question1" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="question2">¿Te gusta la música en directo?</label>
+        <select id="question2" class="form-control" name="question2" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="question3">¿Te apetece desconectar o conocer gente?</label>
+        <select id="question3" class="form-control" name="question3" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Desconectar">Desconectar</option>
+          <option value="Conocer gente">Conocer gente</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="question4">¿Buscas experiencias nuevas?</label>
+        <select id="question4" class="form-control" name="question4" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="question5">¿Buscas un plan con amigos?</label>
+        <select id="question5" class="form-control" name="question5" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="question6">¿Te apetece tomar algo?</label>
+        <select id="question6" class="form-control" name="question6" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="question7">¿Te gusta la cultura?</label>
+        <select id="question7" class="form-control" name="question7" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="question8">¿Te gusta el deporte?</label>
+        <select id="question8" class="form-control" name="question8" required>
+          <option value="">Selecciona una opción</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="btn">
+        <button type="submit" class="btn-light">Enviar</button>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock content %}

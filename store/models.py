@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import signals
+
 
 # Create your models here.
 
@@ -112,26 +114,6 @@ class Order(models.Model):
         )
 
 
-
-# Relationship between User and Tag
-class UserTag(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name="Tag")
-
-    class Meta:
-        verbose_name_plural = 'User Tags'
-        unique_together = ('user', 'tag')
-
-    def __str__(self):
-        return f"{self.user.username} - {self.tag.tag}"
-    
-
-
-# Agregar el campo user_tags en el modelo User
-User.add_to_class('user_tags', models.ManyToManyField(Tag, through=UserTag, blank=True, verbose_name="User Tags"))
-
-
-
 # Permitir al administrador añadir etiquetas a los usuarios
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -158,3 +140,36 @@ class Favorites(models.Model):
         ordering = ('-created_at', )
     def __str__(self):
         return str(self.user)
+
+
+
+class CustomUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_tags = models.ManyToManyField(Tag, through='UserTag', verbose_name="User Tags")
+
+    def __str__(self):
+        return str(self.user)
+    
+
+
+
+# Relationship between User and Tag
+class UserTag(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="User")
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, verbose_name="Tag")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created Date")
+
+    class Meta:
+        verbose_name_plural = 'User Tags'
+        unique_together = ('user', 'tag')
+
+    def __str__(self):
+        return f"{self.user} - {self.tag.tag}"
+    
+
+def create_custom_user(sender, instance, created, **kwargs):
+    if created:
+        CustomUser.objects.create(user=instance)
+
+# Registrar la señal para que se ejecute cuando se crea un nuevo usuario
+signals.post_save.connect(create_custom_user, sender=User)

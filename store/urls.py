@@ -19,6 +19,8 @@ urlpatterns = [
     path('orders/', views.orders, name="orders"),
     path('add-to-favorites/', views.add_to_favorites, name="add-to-favorites"),
     path('remove-favorite/<int:product_id>/', views.remove_favorite, name="remove-favorite"),
+    path('cuestionario/', views.cuestionario, name="cuestionario"),
+    path('recomendaciones/', views.recomendaciones, name="recomendaciones"),
 
     #URL for Products
     path('product/<slug:slug>/', views.detail, name="product-detail"),

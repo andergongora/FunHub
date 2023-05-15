@@ -1,6 +1,6 @@
 import django
 from django.contrib.auth.models import User
-from store.models import Address, Cart, Category, Order, Product, Favorites
+from store.models import Address, Cart, Category, Order, Product, Favorites, Tag, UserTag
 from django.shortcuts import redirect, render, get_object_or_404
 from .forms import RegistrationForm, AddressForm
 from django.contrib import messages
@@ -8,8 +8,9 @@ from django.views import View
 import decimal
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator # for Class Based Views
-from django.db.models import Q
+from django.db.models import Q, Count
 from .models import Product
+from django.shortcuts import redirect
 
 
 
@@ -275,3 +276,67 @@ def add_to_favorites(request):
     
     return redirect('store:favorites')
     
+@login_required
+def cuestionario(request):
+    user = request.user
+    if request.method == 'POST':
+        # Obtener respuestas del formulario
+        answer1 = request.POST.get('question1')
+        answer2 = request.POST.get('question2')
+        answer3 = request.POST.get('question3')
+        answer4 = request.POST.get('question4')
+        answer5 = request.POST.get('question5')
+        answer6 = request.POST.get('question6')
+        answer7 = request.POST.get('question7')
+        answer8 = request.POST.get('question8')
+
+        # Asignar tags según las respuestas
+        tags = []
+        if answer1 == 'Sí':
+            tags.append('aire_libre')
+        if answer2 == 'Sí':
+            tags.append('musica')
+        if answer3 == 'Desconectar':
+            tags.append('desconectar')
+        if answer4 == 'Sí':
+            tags.append('diferente')
+        if answer5 == 'Sí':
+            tags.append('social')
+        if answer6 == 'Sí':
+            tags.append('comida_bebida')
+        if answer7 == 'Sí':
+            tags.append('cultura')
+        if answer8 == 'Sí':
+            tags.append('deporte')
+
+        # Eliminar todos los tags existentes del usuario
+        user.customuser.user_tags.clear()
+        
+        # Guardar los tags asignados al usuario
+        user_tags = Tag.objects.filter(tag__in=tags)
+        for tag in user_tags:
+            UserTag.objects.get_or_create(user=user.customuser, tag=tag)
+        
+        # Redirigir al usuario a la página de recomendaciones
+        return redirect('store:recomendaciones')
+
+    return render(request, 'store/cuestionario.html')
+
+@login_required
+def recomendaciones(request):
+    user = request.user
+    user_tags = user.customuser.user_tags.all()
+
+    # Obtener los productos que tienen al menos uno de los tags del usuario
+    products = Product.objects.filter(tags__in=user_tags).distinct()
+
+    # Anotar la cantidad de tags en común con el usuario
+    products = products.annotate(common_tags=Count('tags', filter=Q(tags__in=user_tags)))
+
+    # Ordenar los productos por la cantidad de tags en común en orden descendente
+    products = products.order_by('-common_tags')
+
+    favorites = products.filter(favorites__user=user)
+
+    context = {'products': products, 'favorites': favorites}
+    return render(request, 'store/recomendaciones.html', context)

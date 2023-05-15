@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Address, Category, Product, Cart, Order, Tag, UserProfile, Favorites
+from .models import Address, Category, Product, Cart, Order, Tag, UserProfile, Favorites, UserTag, CustomUser
 
 # Register your models here.
 class AddressAdmin(admin.ModelAdmin):
@@ -89,8 +89,22 @@ class FavoritesAdmin(admin.ModelAdmin):
     search_fields = ('user', 'product')
 
 
+class UserTagAdmin(admin.ModelAdmin):
+    list_display = ('user', 'tag', 'created_at')
+    list_filter = ('created_at',)
+    list_per_page = 20
+    search_fields = ('user', 'tag')
 
 
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('user', 'display_user_tags')
+    list_filter = ('user', 'user_tags')
+    list_per_page = 20
+    search_fields = ('user', 'user_tags__tag')  # Utiliza user_tags__tag para buscar en el campo 'tag' de la relación ManyToMany
+
+    def display_user_tags(self, obj):
+        return ', '.join(tag.tag for tag in obj.user_tags.all())
+    display_user_tags.short_description = 'User Tags'
 
 
 admin.site.register(Address, AddressAdmin)
@@ -102,5 +116,5 @@ admin.site.register(Tag, TagAdmin)
 admin.site.register(Favorites, FavoritesAdmin)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
-
-
+admin.site.register(UserTag, UserTagAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
