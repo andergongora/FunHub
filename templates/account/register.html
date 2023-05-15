@@ -10,11 +10,7 @@
         
         
         <div class="card mb-4" id="forms">
-          <div class="card-header">
-            <small>
-            Añadiendo direcciones de envío y facturación, puedes ahorrar tiempo en el proceso de compra, acceder a tu carrito de la compra desde cualquier dispositivo y ver tu historial de pedidos.
-            </small>
-          </div>
+          
           <div class="card-body">
 
             {% include 'partials/_messages.html' %}
@@ -30,7 +26,7 @@
                         <small class="text-danger">{{fm.errors|striptags}}</small>
                     </div>
                 {% endfor %}
-                <button class="btn btn-primary" type="submit"></button>
+                <button class="btn btn-primary" type="submit">Registrarse</button>
               </fieldset>
 
               {% if form.non_field_errors %}

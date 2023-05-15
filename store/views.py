@@ -21,7 +21,10 @@ def search(request):
     categories = Category.objects.filter(is_active=True)
     if query:
         products = Product.objects.filter(Q(title__icontains=query) | Q(short_description__icontains=query) | Q(detail_description__icontains=query))
-    favorites = Product.objects.filter(favorites__user=request.user)
+    user = request.user
+    favorites = []
+    if user.is_authenticated:
+        favorites = Product.objects.filter(favorites__user=user)
     context = {'products': products, 'categories':categories, 'favorites': favorites,}
     return render(request, 'store/search.html', context)
 
@@ -41,7 +44,10 @@ def detail(request, slug):
     for categoria in product.category.all():
         related_products += Product.objects.exclude(id=product.id).filter(is_active=True, category__title=categoria.title)
     categories=product.category.all()
-    favorites = Product.objects.filter(favorites__user=request.user)
+    favorites = []
+    user = request.user
+    if user.is_authenticated:
+        favorites = Product.objects.filter(favorites__user=user)
     context = {
         'product': product,
         'related_products': related_products,
@@ -61,8 +67,10 @@ def category_products(request, slug):
     category = get_object_or_404(Category, slug=slug)
     products = Product.objects.filter(is_active=True, category=category)
     categories = Category.objects.filter(is_active=True)
-    favorites = Product.objects.filter(favorites__user=request.user)
-
+    favorites = []
+    user = request.user
+    if user.is_authenticated:
+        favorites = Product.objects.filter(favorites__user=user)
     context = {
         'category': category,
         'products': products,
